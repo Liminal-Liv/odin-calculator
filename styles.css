@@ -10,13 +10,13 @@ body {
     flex-direction: column;
     background-color: rgb(54, 54, 54);
     padding: 10px;
+    border-radius: 10px;
 }
 
 .calculator-buttons {
     display: flex;
     flex-direction: column;
     width: 400px;
-    gap: 5px;
 }
 
 .display {
@@ -35,15 +35,30 @@ body {
     display: flex;
     height: 100px;
     justify-content: space-around;
-    gap: 5px;
+    gap: 8px;
 }
 
 button {
     width: 98px;
-    height: 98px;
+    height: 90px;
     font-size: 2em;
     border: 1px solid #ccc;
     background-color: #f0f0f0;
     cursor: pointer;
     border-radius: 5px;
+    border: none;
+    outline: none;
+}
+
+.operator {
+    background-color: rgb(162, 201, 201);
+}
+
+.equals {
+    width: 400px;
+    background-color: rgb(162, 201, 201);
+}
+
+.clear {
+    background-color: rgb(204, 210, 211);
 }
