@@ -81,16 +81,19 @@ function handleButtonClick(event) {
 }
 
 function handleNumber(buttonValue) {
-    currentNumber = currentNumber.toString();
-
     if (awaitingNextNumber) {
-        currentNumber = buttonValue;
+        currentNumber = (buttonValue === '.') ? '0.' : buttonValue;
         awaitingNextNumber = false;
-    } else if (currentNumber === '0' && buttonValue !== '.') {
-        currentNumber = buttonValue;}
-     else {
+        updateDisplay(currentNumber);
+        return;
+    } if (buttonValue === '.' && currentNumber.includes('.')) {
+        return;
+    } if (currentNumber === '0' && buttonValue !== '.') {
+        currentNumber = buttonValue;
+    } else {
         currentNumber += buttonValue;
     }
+
     updateDisplay(currentNumber);
 }
 
