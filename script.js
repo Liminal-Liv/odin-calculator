@@ -115,7 +115,7 @@ function handleEquals() {
 
 function clear() {
     operatorState = null;
-    currentNumber = 0;
+    currentNumber = '0';
     storedNumber = null;
     awaitingNextNumber = false;
     updateDisplay('0');
@@ -123,3 +123,24 @@ function clear() {
 
 const calculatorContainer = document.querySelector('.calculator-background');
 calculatorContainer.addEventListener('click', handleButtonClick);
+
+
+// backspace and negative buttons
+// refactor: simplify the code by making updateDisplay the single, consistent way to change the calculator's visual output.
+// update html so you can't manually type in the input box for display
+// negative numbers aren't working
+// change the gap between buttons and padding on calculator
+// chain operations in handleOperator? (difficult with my current equal reset?)
+
+// const buttonValue = clickedElement.textContent
+
+//  (don't clear last operation. allow user to spam = to repeat last operation)
+
+
+/*                         IDEAS                         */
+
+// css style to highlight operation you're currently using
+// turn handlebuttonclick into a switch statement and substitute a variable for the first if check conditional
+
+
+// fix for multiple decimals
