@@ -16,35 +16,22 @@ function updateDisplay(value) {
 }
 
 function limitNumberDigits(num, maxlength) {
-    // Convert number to string for length check
     const numString = String(num);
     if (numString.length > maxlength) {
       // If it's a floating-point number, use toPrecision
       if (numString.includes('.')) {
         return +num.toPrecision(maxlength);
       }
-      // If it's a large integer, handle appropriately (e.g., show in scientific notation)
       return num.toExponential(maxlength - 5);
     }
     return num;
 }
 
 // basic arithmetic functions
-function add(numA, numB) {
-    return numA + numB;
-}
-
-function subtract(numA, numB) {
-    return numA - numB;
-}
-
-function multiply(numA, numB) {
-    return numA * numB;
-}
-
-function divide(numA, numB) {
-    return numB === 0 ? 'undefined' : numA / numB;
-}
+const add = (numA, numB) => numA + numB;
+const subtract = (numA, numB) => numA - numB;
+const multiply = (numA, numB) => numA * numB;
+const divide = (numA, numB) => numB === 0 ? 'undefined' : numA / numB;
 
 function operate(operator, numA, numB) {
     switch (operator) {
