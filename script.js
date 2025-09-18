@@ -21,10 +21,9 @@ const calculator = {
     },
 
     handleNumber(buttonValue) {
-        if (awaitingNextNumber) {
+        if (this.awaitingNextNumber) {
             this.currentNumber = (buttonValue === '.') ? '0.' : buttonValue;
             this.awaitingNextNumber = false;
-            this.updateDisplay(this.currentNumber);
             return;
         } if (buttonValue === '.' && this.currentNumber.includes('.')) {
             return;
@@ -33,7 +32,6 @@ const calculator = {
         } else {
             this.currentNumber += buttonValue;
         }
-        this.updateDisplay(this.currentNumber);
     },
 
     handleOperator(operator) {
@@ -42,7 +40,6 @@ const calculator = {
             const result = this.operate(this.operatorState, parseFloat(this.storedNumber), parseFloat(this.currentNumber));
             const formattedResult = this.limitNumberDigits(result, 12);
             this.storedNumber = formattedResult;
-            this.updateDisplay(formattedResult);
         } else {
             // for starting our first calculation when operatorState = null
             this.storedNumber = parseFloat(this.currentNumber);
@@ -56,8 +53,6 @@ const calculator = {
         if (this.storedNumber !== null && this.operatorState !== null) {
             const result = this.operate(this.operatorState, parseFloat(this.storedNumber), parseFloat(this.currentNumber));
             const formattedResult = this.limitNumberDigits(result, 12);
-            this.updateDisplay(formattedResult);
-    
             this.currentNumber = formattedResult.toString();
             this.storedNumber = null;
             this.operatorState = null;
@@ -70,7 +65,6 @@ const calculator = {
         this.currentNumber = '0';
         this.storedNumber = null;
         this.awaitingNextNumber = false;
-        this.updateDisplay('0');
     },
 
     operate(operator, numA, numB) {
@@ -104,6 +98,7 @@ function handleButtonClick(event) {
     } else if (!isNaN(parseFloat(buttonValue)) || buttonValue === '.') {
         calculator.handleNumber(buttonValue);
     }
+    calculator.updateDisplay(calculator.currentNumber);
 }
 
 const calculatorContainer = document.querySelector('.calculator-background');
