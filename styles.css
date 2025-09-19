@@ -1,6 +1,7 @@
 body {
     display: flex;
     justify-content: center;
+    background-color: #5F6368;
 }
 
 .calculator-background {
@@ -16,11 +17,11 @@ body {
 .calculator-buttons {
     display: flex;
     flex-direction: column;
-    width: 400px;
+    width: 350px;
 }
 
 .display {
-    width: 390px;
+    width: 340px;
     height: 60px;
     margin-bottom: 10px;
     border-radius: 5px;
@@ -33,14 +34,14 @@ body {
 .row-3,
 .row-4 {
     display: flex;
-    height: 100px;
+    height: 75px;
     justify-content: space-around;
-    gap: 8px;
+    gap: 5px;
 }
 
 button {
-    width: 98px;
-    height: 90px;
+    width: 25%;
+    height: 70px;
     font-size: 2em;
     border: 1px solid #ccc;
     background-color: #f0f0f0;
@@ -55,10 +56,16 @@ button {
 }
 
 .equals {
-    width: 400px;
+    width: 100%;
     background-color: rgb(162, 201, 201);
 }
 
 .clear {
     background-color: rgb(204, 210, 211);
+}
+
+.active {
+    font-weight: bold;
+    box-shadow: -5px -5px -10px rgba(0, 0, 0, 0.3);
+    transform: scale(0.96);
 }

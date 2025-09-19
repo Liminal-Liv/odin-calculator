@@ -85,13 +85,14 @@ const buttonHandlers = {
     'x': (value) => calculator.handleOperator(value),
     '÷': (value) => calculator.handleOperator(value),
     '=': () => calculator.handleEquals(),
-    'A/C': () => calculator.clear(),
+    'AC': () => calculator.clear(),
 };
 
 function handleButtonClick(event) {
     const clickedElement = event.target;
     if (clickedElement.tagName !== 'BUTTON') return;
     const buttonValue = clickedElement.textContent;
+    toggleActiveButton(clickedElement);
 
     if (buttonHandlers[buttonValue]) {
         buttonHandlers[buttonValue](buttonValue);
@@ -99,6 +100,21 @@ function handleButtonClick(event) {
         calculator.handleNumber(buttonValue);
     }
     calculator.updateDisplay(calculator.currentNumber);
+}
+
+function toggleActiveButton(clickedButton) {
+    const operators = ['+', '-', 'x', '÷']
+    const isOperator = operators.includes(clickedButton.textContent);
+
+    const operatorButtons = document.querySelectorAll('button.operator');
+
+    operatorButtons.forEach(button => {
+        button.classList.remove('active');
+    })
+
+    if (isOperator) {
+        clickedButton.classList.add('active');
+    }
 }
 
 const calculatorContainer = document.querySelector('.calculator-background');
