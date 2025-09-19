@@ -7,15 +7,15 @@ const calculator = {
     updateDisplay(value) {
         const displayElement = document.querySelector('.display');
         if (displayElement) {
-            displayElement.value = this.limitNumberDigits(value, 12);
+            displayElement.value = this.limitNumberDigits(value, 8);
             }
     },
 
     limitNumberDigits(num, maxlength) {
-        const numString = String(num);
-        if (numString.length > maxlength) {
-            // Use toPrecision for decimal numbers, toExponential for very large numbers
-            return numString.includes('.') ? +num.toPrecision(maxlength) : num.toExponential(maxlength - 5);
+        const stringValue = String(num);
+        const numericValue = Number(num);
+        if (stringValue.length > maxlength) {
+            return numericValue.toPrecision(maxlength);
         }
         return num;
     },
@@ -38,8 +38,7 @@ const calculator = {
         // If a previous operation is pending, calculate it first. (allows chaining operations without using equals)
         if (this.operatorState && !this.awaitingNextNumber) {
             const result = this.operate(this.operatorState, parseFloat(this.storedNumber), parseFloat(this.currentNumber));
-            const formattedResult = this.limitNumberDigits(result, 12);
-            this.storedNumber = formattedResult;
+            this.storedNumber = result;
         } else {
             // for starting our first calculation when operatorState = null
             this.storedNumber = parseFloat(this.currentNumber);
@@ -52,8 +51,7 @@ const calculator = {
     handleEquals() {
         if (this.storedNumber !== null && this.operatorState !== null) {
             const result = this.operate(this.operatorState, parseFloat(this.storedNumber), parseFloat(this.currentNumber));
-            const formattedResult = this.limitNumberDigits(result, 12);
-            this.currentNumber = formattedResult.toString();
+            this.currentNumber = result.toString();
             this.storedNumber = null;
             this.operatorState = null;
             this.awaitingNextNumber = true;
