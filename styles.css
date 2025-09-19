@@ -21,12 +21,31 @@ body {
 }
 
 .display {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     width: 340px;
-    height: 70px;
+    height: 80px;
     margin-bottom: 25px;
     border-radius: 5px;
+    background-color: #f0f0f0;
+}
+
+.current-number {
     text-align: right;
     font-size: 48px;
+    width: 330px;
+    background-color: transparent;
+    border: none;
+    color: black;
+}
+
+.stored-number {
+    text-align: left;
+    font-size: 16px;
+    background-color: transparent;
+    border: none;
+    color: black;
 }
 
 .row-1,

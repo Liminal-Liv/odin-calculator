@@ -1,14 +1,22 @@
 const calculator = {
     operatorState: null,
-    storedNumber: null,
+    storedNumber: '',
     currentNumber: '0',
     awaitingNextNumber: false,
+    maxDisplayLength: 12,
 
     updateDisplay(value) {
-        const displayElement = document.querySelector('.display');
+        const displayElement = document.querySelector('.current-number');
         if (displayElement) {
-            displayElement.value = this.limitNumberDigits(value, 8);
+            displayElement.value = this.limitNumberDigits(value, this.maxDisplayLength);
             }
+    },
+
+    updateStoredDisplay(value) {
+        const displayElement = document.querySelector('.stored-number');
+        if (displayElement) {
+            displayElement.value = this.limitNumberDigits(value, this.maxDisplayLength);
+        }
     },
 
     limitNumberDigits(num, maxlength) {
@@ -21,6 +29,11 @@ const calculator = {
     },
 
     handleNumber(buttonValue) {
+        const displayElement = document.querySelector('.current-number');
+        if (displayElement.value.length >= this.maxDisplayLength) {
+            return;
+        }
+
         if (this.awaitingNextNumber) {
             this.currentNumber = (buttonValue === '.') ? '0.' : buttonValue;
             this.awaitingNextNumber = false;
@@ -43,16 +56,16 @@ const calculator = {
             // for starting our first calculation when operatorState = null
             this.storedNumber = parseFloat(this.currentNumber);
         }
-    
+            this.currentNumber = '';
             this.operatorState = operator;
             this.awaitingNextNumber = true;
     },
 
     handleEquals() {
-        if (this.storedNumber !== null && this.operatorState !== null) {
+        if (this.storedNumber !== '' && this.operatorState !== null) {
             const result = this.operate(this.operatorState, parseFloat(this.storedNumber), parseFloat(this.currentNumber));
             this.currentNumber = result.toString();
-            this.storedNumber = null;
+            this.storedNumber = '';
             this.operatorState = null;
             this.awaitingNextNumber = true;
         }
@@ -61,7 +74,7 @@ const calculator = {
     clear() {
         this.operatorState = null;
         this.currentNumber = '0';
-        this.storedNumber = null;
+        this.storedNumber = '';
         this.awaitingNextNumber = false;
     },
 
@@ -98,6 +111,7 @@ function handleButtonClick(event) {
         calculator.handleNumber(buttonValue);
     }
     calculator.updateDisplay(calculator.currentNumber);
+    calculator.updateStoredDisplay(calculator.storedNumber);
 }
 
 function toggleActiveButton(clickedButton) {
@@ -116,7 +130,6 @@ function toggleActiveButton(clickedButton) {
 }
 
 const calculatorContainer = document.querySelector('.calculator-background');
-// following best practice, we'll verify an element exists before attempting to click to avoid errors
 if (calculatorContainer) {
     calculatorContainer.addEventListener('click', handleButtonClick);
 } else {
