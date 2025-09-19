@@ -1,7 +1,7 @@
 body {
     display: flex;
     justify-content: center;
-    background-color: #5F6368;
+    background-color: rgb(160, 194, 185);
 }
 
 .calculator-background {
@@ -9,9 +9,9 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: rgb(54, 54, 54);
-    padding: 10px;
-    border-radius: 10px;
+    background-color: rgb(66, 66, 66);
+    padding: 25px 20px 25px 20px;
+    border-radius: 25px;
 }
 
 .calculator-buttons {
@@ -22,11 +22,11 @@ body {
 
 .display {
     width: 340px;
-    height: 60px;
-    margin-bottom: 10px;
+    height: 70px;
+    margin-bottom: 25px;
     border-radius: 5px;
     text-align: right;
-    font-size: 3em;
+    font-size: 48px;
 }
 
 .row-1,
@@ -40,15 +40,21 @@ body {
 }
 
 button {
-    width: 25%;
-    height: 70px;
-    font-size: 2em;
+    width: 21%;
+    height: 55px;
+    font-size: 32px;
     border: 1px solid #ccc;
     background-color: #f0f0f0;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 15px;
     border: none;
     outline: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.1s ease-in-out, transform 0.1s ease-in-out;
+}
+
+button:hover {
+    transform: scale(1.04);
 }
 
 .operator {
@@ -57,15 +63,21 @@ button {
 
 .equals {
     width: 100%;
-    background-color: rgb(162, 201, 201);
+    background-color: rgb(152, 192, 192);
+    margin: 7px 0px 7px 0px;
+}
+
+.equals:hover {
+    transform: scale(1.02);
 }
 
 .clear {
-    background-color: rgb(204, 210, 211);
+    background-color: rgb(221, 169, 106);
 }
 
-.active {
+/* javascript class */
+button.active {
     font-weight: bold;
-    box-shadow: -5px -5px -10px rgba(0, 0, 0, 0.3);
-    transform: scale(0.96);
+    transform: translateY(2px); 
+    box-shadow: none;
 }
