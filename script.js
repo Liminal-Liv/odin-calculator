@@ -4,6 +4,10 @@ const calculator = {
     currentNumber: '0',
     awaitingNextNumber: false,
     maxDisplayLength: 12,
+    // these last three properties are all used for chaining repeat equal presses
+    lastOperation: null,
+    lastOperand: null,
+    justEvaluated: false,
 
     updateDisplay(value) {
         const displayElement = document.querySelector('.current-number');
@@ -48,27 +52,51 @@ const calculator = {
     },
 
     handleOperator(operator) {
-        // If a previous operation is pending, calculate it first. (allows chaining operations without using equals)
+        // The justEvaluated flag is reset here to ensure that switching to a different operation 
+        // after multiple equal presses will not reuse the wrong number. (lastOperand from last equal press)
+        this.justEvaluated = false;
+        // If a previous operation is pending, calculate it first when pressing operator.
         if (this.operatorState && !this.awaitingNextNumber) {
+            this.lastOperand = parseFloat(this.currentNumber);
             const result = this.operate(this.operatorState, parseFloat(this.storedNumber), parseFloat(this.currentNumber));
             this.storedNumber = result;
-        } else {
+        } 
+        else {
             // for starting our first calculation when operatorState = null
             this.storedNumber = parseFloat(this.currentNumber);
         }
             this.currentNumber = '';
             this.operatorState = operator;
+            this.lastOperation = operator;
             this.awaitingNextNumber = true;
     },
 
     handleEquals() {
-        if (this.storedNumber !== '' && this.operatorState !== null) {
-            const result = this.operate(this.operatorState, parseFloat(this.storedNumber), parseFloat(this.currentNumber));
+        
+        // !justEvaluated is here to check that this isn't a back to back equal press
+        if (this.storedNumber !== '' && this.operatorState !== null && !this.justEvaluated) {
+            numA = parseFloat(this.storedNumber);
+            numB = parseFloat(this.currentNumber);
+
+            this.lastOperand = numB;
+            this. lastOperation = this.operatorState;
+
+            const result = this.operate(this.operatorState, numA, numB)
+            this.currentNumber = result.toString();
+            this.awaitingNextNumber = true;
+            this.justEvaluated = true;
+
+        } else if (this.justEvaluated && this.lastOperand !== null) {
+            numA = parseFloat(this.currentNumber);
+            numB = this.lastOperand;
+
+            const result = this.operate(this.lastOperation, numA, numB);
             this.currentNumber = result.toString();
             this.storedNumber = '';
-            this.operatorState = null;
-            this.awaitingNextNumber = true;
+        } else {
+            return;
         }
+        this.operatorState = null;
     },
 
     clear() {
@@ -76,6 +104,9 @@ const calculator = {
         this.currentNumber = '0';
         this.storedNumber = '';
         this.awaitingNextNumber = false;
+        this.lastOperation = null;
+        this.lastOperand = null;
+        this.justEvaluated = null;
     },
 
     operate(operator, numA, numB) {
@@ -135,3 +166,5 @@ if (calculatorContainer) {
 } else {
     console.warn('Calculator container element not found. Event listener not attached.');
 }
+
+// backspace and negative buttons
