@@ -16,10 +16,20 @@ const calculator = {
             }
     },
 
-    updateStoredDisplay(value) {
+    updateStoredDisplay() {
         const displayElement = document.querySelector('.stored-number');
         if (displayElement) {
-            displayElement.value = this.limitNumberDigits(value, this.maxDisplayLength);
+            const storedValue = this.storedNumber || this.lastOperand;
+            let displayValue = '';
+
+            if (storedValue !== '' && storedValue !== null) {
+                displayValue += this.limitNumberDigits(storedValue, this.maxDisplayLength);
+            }
+            if (this.operatorState || this.lastOperation) {
+                let operator = this.operatorState ? this.operatorState : this.lastOperation;
+                displayValue += ' ' + operator;
+            }
+            displayElement.value = displayValue;
         }
     },
 
@@ -36,11 +46,10 @@ const calculator = {
         const displayElement = document.querySelector('.current-number');
         if (displayElement.value.length >= this.maxDisplayLength) {
             return;
-        }
-
-        if (this.awaitingNextNumber) {
+        } if (this.awaitingNextNumber) {
             this.currentNumber = (buttonValue === '.') ? '0.' : buttonValue;
             this.awaitingNextNumber = false;
+            this.justEvaluated = false; // Added this line to prevent repeat equal issue
             return;
         } if (buttonValue === '.' && this.currentNumber.includes('.')) {
             return;
@@ -55,13 +64,13 @@ const calculator = {
         // The justEvaluated flag is reset here to ensure that switching to a different operation 
         // after multiple equal presses will not reuse the wrong number. (lastOperand from last equal press)
         this.justEvaluated = false;
+
         // If a previous operation is pending, calculate it first when pressing operator.
         if (this.operatorState && !this.awaitingNextNumber) {
             this.lastOperand = parseFloat(this.currentNumber);
             const result = this.operate(this.operatorState, parseFloat(this.storedNumber), parseFloat(this.currentNumber));
             this.storedNumber = result;
-        } 
-        else {
+        } else {
             // for starting our first calculation when operatorState = null
             this.storedNumber = parseFloat(this.currentNumber);
         }
@@ -69,11 +78,11 @@ const calculator = {
             this.operatorState = operator;
             this.lastOperation = operator;
             this.awaitingNextNumber = true;
+            this.updateStoredDisplay();
     },
 
     handleEquals() {
-        
-        // !justEvaluated is here to check that this isn't a back to back equal press
+        // Standard evaluation for the first '=' press after an operation
         if (this.storedNumber !== '' && this.operatorState !== null && !this.justEvaluated) {
             numA = parseFloat(this.storedNumber);
             numB = parseFloat(this.currentNumber);
@@ -83,10 +92,12 @@ const calculator = {
 
             const result = this.operate(this.operatorState, numA, numB)
             this.currentNumber = result.toString();
-            this.awaitingNextNumber = true;
+            this.storedNumber = ''; // Clear storedNumber to prepare for next calculation
+            this.operatorState = null;
             this.justEvaluated = true;
-
-        } else if (this.justEvaluated && this.lastOperand !== null) {
+        } 
+        // repeat '=' press, re-using the last operation and operand
+        else if (this.justEvaluated && this.lastOperand !== null) {
             numA = parseFloat(this.currentNumber);
             numB = this.lastOperand;
 
@@ -96,6 +107,7 @@ const calculator = {
         } else {
             return;
         }
+        this.updateStoredDisplay();
         this.operatorState = null;
     },
 
@@ -106,7 +118,7 @@ const calculator = {
         this.awaitingNextNumber = false;
         this.lastOperation = null;
         this.lastOperand = null;
-        this.justEvaluated = null;
+        this.justEvaluated = false;
     },
 
     operate(operator, numA, numB) {
@@ -142,7 +154,7 @@ function handleButtonClick(event) {
         calculator.handleNumber(buttonValue);
     }
     calculator.updateDisplay(calculator.currentNumber);
-    calculator.updateStoredDisplay(calculator.storedNumber);
+    calculator.updateStoredDisplay();
 }
 
 function toggleActiveButton(clickedButton) {
@@ -166,5 +178,3 @@ if (calculatorContainer) {
 } else {
     console.warn('Calculator container element not found. Event listener not attached.');
 }
-
-// backspace and negative buttons
