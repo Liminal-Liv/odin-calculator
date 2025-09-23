@@ -78,7 +78,6 @@ const calculator = {
             this.operatorState = operator;
             this.lastOperation = operator;
             this.awaitingNextNumber = true;
-            this.updateStoredDisplay();
     },
 
     handleEquals() {
@@ -107,7 +106,6 @@ const calculator = {
         } else {
             return;
         }
-        this.updateStoredDisplay();
         this.operatorState = null;
     },
 
@@ -119,6 +117,13 @@ const calculator = {
         this.lastOperation = null;
         this.lastOperand = null;
         this.justEvaluated = false;
+    },
+
+    delete() {
+        this.currentNumber = this.currentNumber.toString().slice(0, -1);
+        if (this.currentNumber === '') {
+            this.currentNumber = '0';
+        }
     },
 
     operate(operator, numA, numB) {
@@ -140,6 +145,7 @@ const buttonHandlers = {
     '÷': (value) => calculator.handleOperator(value),
     '=': () => calculator.handleEquals(),
     'AC': () => calculator.clear(),
+    '⌫': () => calculator.delete(),
 };
 
 function handleButtonClick(event) {

@@ -74,7 +74,7 @@ button:hover {
 }
 
 .equals {
-    width: 100%;
+    width: 71%;
     background-color: rgb(152, 192, 192);
     margin: 7px 0px 7px 0px;
 }
@@ -85,6 +85,11 @@ button:hover {
 
 .clear {
     background-color: rgb(221, 169, 106);
+    margin: 7px 0px 7px 0px;
+}
+
+.delete {
+    background-color: #d6cac6;
 }
 
 /* javascript class */
