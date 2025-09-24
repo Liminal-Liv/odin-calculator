@@ -33,7 +33,7 @@ body {
     background-color: #f0f0f0;
 }
 
-.current-number {
+.current-display {
     text-align: right;
     font-size: 48px;
     width: 336px;
@@ -43,7 +43,7 @@ body {
     color: black;
 }
 
-.stored-number {
+.previous-display {
     text-align: left;
     font-size: 16px;
     background-color: transparent;

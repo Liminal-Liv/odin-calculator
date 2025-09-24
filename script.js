@@ -9,15 +9,15 @@ const calculator = {
     lastOperand: null,
     justEvaluated: false,
 
-    updateDisplay(value) {
-        const displayElement = document.querySelector('.current-number');
-        if (displayElement) {
-            displayElement.value = this.limitNumberDigits(value, this.maxDisplayLength);
+    updateCurrentDisplay(value) {
+        const currentDisplay = document.querySelector('.current-display');
+        if (currentDisplay) {
+            currentDisplay.value = this.limitNumberDigits(value, this.maxDisplayLength);
             }
     },
 
-    updateStoredDisplay(value) {
-        const previousDisplay = document.querySelector('.stored-number');
+    updatePreviousDisplay(value) {
+        const previousDisplay = document.querySelector('.previous-display');
         if (previousDisplay) {
             previousDisplay.value = value;
         }
@@ -39,8 +39,8 @@ const calculator = {
     },
 
     handleNumber(buttonValue) {
-        const displayElement = document.querySelector('.current-number');
-        if (displayElement.value.length >= this.maxDisplayLength) {
+        const currentDisplay = document.querySelector('.current-display');
+        if (currentDisplay.value.length >= this.maxDisplayLength) {
             return;
         } if (this.awaitingNextNumber) {
             this.currentNumber = (buttonValue === '.') ? '0.' : buttonValue;
@@ -75,8 +75,8 @@ const calculator = {
             this.lastOperation = operator;
             this.awaitingNextNumber = true;
 
-            const prevText = this.storedNumber + ' ' + operator;
-            calculator.updateStoredDisplay(prevText);
+            const prevCalculation = this.storedNumber + ' ' + operator;
+            calculator.updatePreviousDisplay(prevCalculation);
     },
 
     handleEquals() {
@@ -84,8 +84,8 @@ const calculator = {
         if (this.storedNumber !== '' && this.operatorState !== null && !this.justEvaluated) {
             numA = parseFloat(this.storedNumber);
             numB = parseFloat(this.currentNumber);
-            let storedDisplay = `${numA} ${this.operatorState} ${numB}`;
-            this.updateStoredDisplay(storedDisplay);
+            const prevCalculation = `${numA} ${this.operatorState} ${numB}`;
+            this.updatePreviousDisplay(prevCalculation);
 
             this.lastOperand = numB;
             this.lastOperation = this.operatorState;
@@ -99,8 +99,8 @@ const calculator = {
         else if (this.justEvaluated && this.lastOperand !== null) {
             numA = parseFloat(this.currentNumber);
             numB = this.lastOperand;
-            let storedDisplay = `${numA} ${this.lastOperation} ${numB}`;
-            this.updateStoredDisplay(storedDisplay);
+            const prevCalculation = `${numA} ${this.lastOperation} ${numB}`;
+            this.updatePreviousDisplay(prevCalculation);
 
             const result = this.operate(this.lastOperation, numA, numB);
             this.currentNumber = result.toString();
@@ -112,7 +112,7 @@ const calculator = {
     },
 
     clearAll() {
-        this.updateStoredDisplay('');
+        this.updatePreviousDisplay('');
         this.operatorState = null;
         this.currentNumber = '0';
         this.storedNumber = '';
@@ -162,7 +162,7 @@ function handleButtonClick(event) {
     } else if (!isNaN(parseFloat(buttonValue)) || buttonValue === '.') {
         calculator.handleNumber(buttonValue);
     }
-    calculator.updateDisplay(calculator.currentNumber);
+    calculator.updateCurrentDisplay(calculator.currentNumber);
 }
 
 function toggleActiveButton(clickedButton) {
