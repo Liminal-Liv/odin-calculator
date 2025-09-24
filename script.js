@@ -94,7 +94,7 @@ const calculator = {
             this.currentNumber = result.toString();
             this.storedNumber = ''; // Clear storedNumber to prepare for next calculation
             this.justEvaluated = true;
-        } 
+        }
         // repeat '=' press, re-using the last operation and operand
         else if (this.justEvaluated && this.lastOperand !== null) {
             numA = parseFloat(this.currentNumber);
@@ -155,29 +155,16 @@ function handleButtonClick(event) {
     const clickedElement = event.target;
     if (clickedElement.tagName !== 'BUTTON') return;
     const buttonValue = clickedElement.textContent;
-    toggleActiveButton(clickedElement);
 
+    const operatorButtons = document.querySelectorAll('button.operator');
+    operatorButtons.forEach(button => button.classList.remove('active'));
     if (buttonHandlers[buttonValue]) {
         buttonHandlers[buttonValue](buttonValue);
+        clickedElement.classList.add('active');
     } else if (!isNaN(parseFloat(buttonValue)) || buttonValue === '.') {
         calculator.handleNumber(buttonValue);
     }
     calculator.updateCurrentDisplay(calculator.currentNumber);
-}
-
-function toggleActiveButton(clickedButton) {
-    const operators = ['+', '-', 'x', '÷']
-    const isOperator = operators.includes(clickedButton.textContent);
-
-    const operatorButtons = document.querySelectorAll('button.operator');
-
-    operatorButtons.forEach(button => {
-        button.classList.remove('active');
-    })
-
-    if (isOperator) {
-        clickedButton.classList.add('active');
-    }
 }
 
 const calculatorContainer = document.querySelector('.calculator-background');
