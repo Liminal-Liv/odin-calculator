@@ -160,7 +160,10 @@ function handleButtonClick(event) {
     operatorButtons.forEach(button => button.classList.remove('active'));
     if (buttonHandlers[buttonValue]) {
         buttonHandlers[buttonValue](buttonValue);
-        clickedElement.classList.add('active');
+        // this prevents AC from getting the active class
+        if (['+', '-', 'x', '÷'].includes(buttonValue)) {
+            clickedElement.classList.add('active');
+          }
     } else if (!isNaN(parseFloat(buttonValue)) || buttonValue === '.') {
         calculator.handleNumber(buttonValue);
     }
