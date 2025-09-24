@@ -39,7 +39,7 @@ const calculator = {
         if (stringValue.length <= maxlength) {
             return stringValue;
         }
-        
+
         const precision = maxlength - 5;
         let formatted = numericValue.toPrecision(precision);
         if (formatted.length > maxlength) {
@@ -115,7 +115,7 @@ const calculator = {
         this.operatorState = null;
     },
 
-    clear() {
+    clearAll() {
         this.operatorState = null;
         this.currentNumber = '0';
         this.storedNumber = '';
@@ -150,7 +150,7 @@ const buttonHandlers = {
     'x': (value) => calculator.handleOperator(value),
     '÷': (value) => calculator.handleOperator(value),
     '=': () => calculator.handleEquals(),
-    'AC': () => calculator.clear(),
+    'AC': () => calculator.clearAll(),
     '⌫': () => calculator.delete(),
 };
 
