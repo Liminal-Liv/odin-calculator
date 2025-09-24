@@ -36,7 +36,8 @@ body {
 .current-number {
     text-align: right;
     font-size: 48px;
-    width: 330px;
+    width: 336px;
+    padding: 0px 2px 0px 2px;
     background-color: transparent;
     border: none;
     color: black;

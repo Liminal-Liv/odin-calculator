@@ -36,10 +36,16 @@ const calculator = {
     limitNumberDigits(num, maxlength) {
         const stringValue = String(num);
         const numericValue = Number(num);
-        if (stringValue.length > maxlength) {
-            return numericValue.toPrecision(maxlength);
+        if (stringValue.length <= maxlength) {
+            return stringValue;
         }
-        return num;
+        
+        const precision = maxlength - 5;
+        let formatted = numericValue.toPrecision(precision);
+        if (formatted.length > maxlength) {
+            return numericValue.toExponential(precision - 1);
+        }
+        return formatted;
     },
 
     handleNumber(buttonValue) {
