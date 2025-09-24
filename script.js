@@ -57,6 +57,15 @@ const calculator = {
     },
 
     handleOperator(operator) {
+        // updates the operator if you press operator buttons multiple times in a row
+        if (this.awaitingNextNumber) {
+            this.operatorState = operator;
+            this.lastOperation = operator;
+            const prevCalculation = this.storedNumber + ' ' + operator;
+            calculator.updatePreviousDisplay(prevCalculation);
+            return;
+        }
+
         // The justEvaluated flag is reset here to ensure that switching to a different operation 
         // after multiple equal presses will not reuse the wrong number. (lastOperand from last equal press)
         this.justEvaluated = false;
@@ -176,3 +185,5 @@ if (calculatorContainer) {
 } else {
     console.warn('Calculator container element not found. Event listener not attached.');
 }
+
+// fix: NaN on back to back operator presses
