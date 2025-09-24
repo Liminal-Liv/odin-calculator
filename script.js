@@ -16,20 +16,10 @@ const calculator = {
             }
     },
 
-    updateStoredDisplay() {
-        const displayElement = document.querySelector('.stored-number');
-        if (displayElement) {
-            const storedValue = this.storedNumber || this.lastOperand;
-            let displayValue = '';
-
-            if (storedValue !== '' && storedValue !== null) {
-                displayValue += this.limitNumberDigits(storedValue, this.maxDisplayLength);
-            }
-            if (this.operatorState || this.lastOperation) {
-                let operator = this.operatorState ? this.operatorState : this.lastOperation;
-                displayValue += ' ' + operator;
-            }
-            displayElement.value = displayValue;
+    updateStoredDisplay(value) {
+        const previousDisplay = document.querySelector('.stored-number');
+        if (previousDisplay) {
+            previousDisplay.value = value;
         }
     },
 
@@ -84,6 +74,9 @@ const calculator = {
             this.operatorState = operator;
             this.lastOperation = operator;
             this.awaitingNextNumber = true;
+
+            const prevText = this.storedNumber + ' ' + operator;
+            calculator.updateStoredDisplay(prevText);
     },
 
     handleEquals() {
@@ -91,20 +84,23 @@ const calculator = {
         if (this.storedNumber !== '' && this.operatorState !== null && !this.justEvaluated) {
             numA = parseFloat(this.storedNumber);
             numB = parseFloat(this.currentNumber);
+            let storedDisplay = `${numA} ${this.operatorState} ${numB}`;
+            this.updateStoredDisplay(storedDisplay);
 
             this.lastOperand = numB;
-            this. lastOperation = this.operatorState;
+            this.lastOperation = this.operatorState;
 
             const result = this.operate(this.operatorState, numA, numB)
             this.currentNumber = result.toString();
             this.storedNumber = ''; // Clear storedNumber to prepare for next calculation
-            this.operatorState = null;
             this.justEvaluated = true;
         } 
         // repeat '=' press, re-using the last operation and operand
         else if (this.justEvaluated && this.lastOperand !== null) {
             numA = parseFloat(this.currentNumber);
             numB = this.lastOperand;
+            let storedDisplay = `${numA} ${this.lastOperation} ${numB}`;
+            this.updateStoredDisplay(storedDisplay);
 
             const result = this.operate(this.lastOperation, numA, numB);
             this.currentNumber = result.toString();
@@ -116,6 +112,7 @@ const calculator = {
     },
 
     clearAll() {
+        this.updateStoredDisplay('');
         this.operatorState = null;
         this.currentNumber = '0';
         this.storedNumber = '';
@@ -166,7 +163,6 @@ function handleButtonClick(event) {
         calculator.handleNumber(buttonValue);
     }
     calculator.updateDisplay(calculator.currentNumber);
-    calculator.updateStoredDisplay();
 }
 
 function toggleActiveButton(clickedButton) {
